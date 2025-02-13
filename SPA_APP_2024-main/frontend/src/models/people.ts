@@ -1,4 +1,5 @@
 export interface People {
+    value: any;
     id: number;
     age: number;
     name: string;
