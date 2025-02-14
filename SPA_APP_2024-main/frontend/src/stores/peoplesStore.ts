@@ -2,7 +2,7 @@ import { type People } from "@/models/people";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import useApi, { useApiRawRequest } from "../models/api";
-import type { P } from "vitest/dist/reporters-yx5ZTtEV.js";
+
 
 export const usePeoplesStore = defineStore('peoplesStore', () => {
     const apiGetPeoples = useApi<People[]>('people');
@@ -66,16 +66,16 @@ export const usePeoplesStore = defineStore('peoplesStore', () => {
         const res = await deletePeopleRequest();
 
         if (res.status === 204) {
-            let id = people.value.indexOf(people);
+            let id = peoples.value.indexOf(people);
 
             if (id !== -1) {
-                people.value.splice(id, 1);
+                peoples.value.splice(id, 1);
             }
 
-            id = people.value.indexOf(people);
+            id = peoples.value.indexOf(people);
 
             if (id !== -1) {
-                people.value.splice(id, 1);
+                peoples.value.splice(id, 1);
             }
         }
     };

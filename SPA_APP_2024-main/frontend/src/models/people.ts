@@ -1,10 +1,9 @@
 export interface People {
-    value: any;
     id: number;
     age: number;
     name: string;
 } 
 
 export interface State {
-    people: People[];
+    peoples: People[];
 }
