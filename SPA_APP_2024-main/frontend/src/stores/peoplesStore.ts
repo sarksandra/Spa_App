@@ -5,7 +5,7 @@ import useApi, { useApiRawRequest } from "../models/api";
 
 
 export const usePeoplesStore = defineStore('peoplesStore', () => {
-    const apiGetPeoples = useApi<People[]>('people');
+    const apiGetPeoples = useApi<People[]>('peoples');
     const peoples = ref<People[]>([]);
     let allPeople: People[] = [];
 
