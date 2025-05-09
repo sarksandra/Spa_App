@@ -6,6 +6,11 @@
                 <Column field="id" header="Inimese ID" style="color: black;" />
                 <Column field="name" header="Inimese Nimi" style="color: black;" />
                 <Column field="age" header="Inimese Vanus" style="color: black;" />
+                <Column>
+                    <template>
+                        <button type="submit">Delete</button>
+                    </template>
+                </Column>
             </DataTable>
             <div v-else>Inimene puuduvad</div>
         </div>
@@ -59,9 +64,7 @@
         } 
     };
 
-    const deletePeople = async () => {
-        if()
-    }
+  
 
     onMounted(async () => {
         peoplesStore.load();
