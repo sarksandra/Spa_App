@@ -6,9 +6,10 @@
                 <Column field="id" header="Inimese ID" style="color: black;" />
                 <Column field="name" header="Inimese Nimi" style="color: black;" />
                 <Column field="age" header="Inimese Vanus" style="color: black;" />
-                <Column>
-                    <template>
-                        <button type="submit">Delete</button>
+                <Column header="Tegevused">
+                    <template #body="slotProps">
+                        <button @click="editPeople(slotProps.data)">Muuda</button>
+                        <button @click="deletePeople(slotProps.data.id)">Kustuta</button>
                     </template>
                 </Column>
             </DataTable>
@@ -63,7 +64,13 @@
             newPeople.value = { name: '', age: 0 };
         } 
     };
+    const editPeople = (person: People) => {
+        newPeople.value = { name: person.name, age: person.age };
+    };
 
+    const deletePeople = async (id: number) => {
+        await peoplesStore.deletePeople(id);
+    };
   
 
     onMounted(async () => {
