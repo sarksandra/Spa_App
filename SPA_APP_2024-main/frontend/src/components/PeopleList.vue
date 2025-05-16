@@ -6,9 +6,9 @@
                 <Column field="id" header="Inimese ID" style="color: black;" />
                 <Column field="name" header="Inimese Nimi" style="color: black;" />
                 <Column field="age" header="Inimese Vanus" style="color: black;" />
-                <Column header="Tegevused">
+                <Column header="">
                     <template #body="slotProps">
-                        <button @click="editPeople(slotProps.data)">Muuda</button>
+                        <button @click="editPerson(data)">Edit</button>
                         <button @click="deletePeople(slotProps.data.id)">Kustuta</button>
                     </template>
                 </Column>
@@ -27,6 +27,21 @@
                     <input v-model="newPeople.age" type="number" id="age" required />
                 </div>
                 <button type="submit">Lisa inimene</button>
+            </form>
+        </div>
+        <div v-if="editingPerson" class="edit-people-form">
+            <h2>Lisa Inimene</h2>
+            <form @submit.prevent="updatePerson">
+                <div>
+                    <label for="name">Nimi:</label>
+                    <input v-model="editingPerson.name" type="text" id="name" required />
+                </div>
+                <div>
+                    <label for="age">Vanus:</label>
+                    <input v-model="editingPerson.age" type="number" id="age" required />
+                </div>
+                <button type="submit" @click="editi">Salvesta</button>
+                <button type="button" @click="editingPerson = null">Tuhista</button>
             </form>
         </div>
     </div>
@@ -64,12 +79,36 @@
             newPeople.value = { name: '', age: 0 };
         } 
     };
-    const editPeople = (person: People) => {
-        newPeople.value = { name: person.name, age: person.age };
+    const editingPerson = ref<Person | null>(null);
+
+    const addPerson = () => {
+        persons.value.push({
+            id: persons.value.length + 1,
+            ...newPerson.value
+        });
+        newPerson.value = { name: "", city: "", region: "", date: "" };
     };
 
+    const deletePerson = (id: number) => {
+        persons.value = persons.value.filter(p => p.id !== id);
+    };
+
+    const editPerson = (person: Person) => {
+        editingPerson.value = { ...person };
+    };
+
+    const updatePerson = () => {
+        if (!editingPerson.value) return;
+        const index = persons.value.findIndex(p => p.id === editingPerson.value?.id);
+        if (index !== -1) {
+            persons.value[index] = { ...editingPerson.value };
+        }
+        editingPerson.value = null;
+    };
+
+
     const deletePeople = async (id: number) => {
-        await peoplesStore.deletePeople(id);
+        peoples.value = peoples.value.filter(p => p.id !== id);
     };
   
 
