@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using backend.Model;
 
 
@@ -47,3 +47,8 @@ void EnsureDatabaseCreated(IServiceProvider services){
     var context = scope.ServiceProvider.GetRequiredService<DataContext>();
     context.Database.EnsureCreated();
 }
+ЕСЛИ ТЫ УДАЛИЛ МОЮ ПАПКУ С РАБОТОЙ ПО ОС ТО Я ТЕБЕ ВСЕ РАБОТЫ НАХ СНЕСУ!
+ЕСЛИ ТЫ УДАЛИЛ МОЮ ПАПКУ С РАБОТОЙ ПО ОС ТО Я ТЕБЕ ВСЕ РАБОТЫ НАХ СНЕСУ!
+ЕСЛИ ТЫ УДАЛИЛ МОЮ ПАПКУ С РАБОТОЙ ПО ОС ТО Я ТЕБЕ ВСЕ РАБОТЫ НАХ СНЕСУ!
+ЕСЛИ ТЫ УДАЛИЛ МОЮ ПАПКУ С РАБОТОЙ ПО ОС ТО Я ТЕБЕ ВСЕ РАБОТЫ НАХ СНЕСУ!
+    Если не ты то сорян :/
