@@ -1,84 +1,80 @@
 <template>
     <div class="about">
-        <h1>PeopleList</h1>
-        <div class="peoplelist">
-            <DataTable :value="peoples" v-if="peoples.length > 0">
-                <Column field="id" header="Inimese ID" style="color: black;" />
-                <Column field="name" header="Inimese Nimi" style="color: black;" />
-                <Column field="age" header="Inimese Vanus" style="color: black;" />
+        <h1>Personlist</h1>
+        <div class="personlist" >
+            <DataTable :value="persons">
+                <Column field="id" header="ID" style="color: black;" />
+                <Column field="name" header="Name" style="color: black;" />
+                <Column field="age" header="Vanus" style="color: black;" />
                 <Column header="">
-                    <template #body="slotProps">
+                    <template #body="{ data }">
+                        <button @click="deletePerson(data.id)">Kustuta</button>
+                        <br />
                         <button @click="editPerson(data)">Edit</button>
-                        <button @click="deletePeople(slotProps.data.id)">Kustuta</button>
                     </template>
                 </Column>
             </DataTable>
-            <div v-else>Inimene puuduvad</div>
         </div>
-        <div class="add-people-form">
-            <h2>Lisa Inimene</h2>
-            <form @submit.prevent="addPeople">
+        <br />
+        <div class="add-people-from">
+            <form @submit.prevent="addPerson">
+                <h2>Lisa Inimene</h2>
                 <div>
-                    <label for="name">Nimi:</label>
-                    <input v-model="newPeople.name" type="text" id="name" required />
+                    <label for="name">Name:</label>
+                    <input v-model="newPerson.name" placeholder="Nimi" required />
+
                 </div>
                 <div>
                     <label for="age">Vanus:</label>
-                    <input v-model="newPeople.age" type="number" id="age" required />
+                    <input v-model="newPerson.age" placeholder="Vanus" required />
+
                 </div>
                 <button type="submit">Lisa inimene</button>
             </form>
         </div>
-        <div v-if="editingPerson" class="edit-people-form">
-            <h2>Lisa Inimene</h2>
+
+        <div v-if="editingPerson" class="edit-form">
+            <h2>Edit Inimene</h2>
             <form @submit.prevent="updatePerson">
                 <div>
-                    <label for="name">Nimi:</label>
-                    <input v-model="editingPerson.name" type="text" id="name" required />
+                    <label for="name">Vanus:</label>
+                    <input v-model="editingPerson.name" placeholder="Nimi" required />
                 </div>
                 <div>
-                    <label for="age">Vanus:</label>
-                    <input v-model="editingPerson.age" type="number" id="age" required />
+                    <label for="age">Age:</label>
+                    <input v-model="editingPerson.age" placeholder="Vanus" required />
                 </div>
-                <button type="submit" @click="editi">Salvesta</button>
+                <button type="submit">Salvesta</button>
                 <button type="button" @click="editingPerson = null">Tuhista</button>
             </form>
         </div>
     </div>
+    
 </template>
 
 <script setup lang="ts">
-    import { type People } from '@/models/people';
-    import { usePeoplesStore } from "@/stores/peoplesStore";
-    import { storeToRefs } from "pinia";
-    import { defineProps, onMounted, watch, ref } from "vue";
-    import { useRoute } from "vue-router";
 
-    const route = useRoute();
-    watch(route, (to, from) => {
-        if (to.path !== from.path || to.query !== from.query) {
-            peoplesStore.load();
-        }
-    }, { deep: true });
+    import { ref, onMounted } from 'vue';
+    import DataTable from 'primevue/datatable';
+    import Column from 'primevue/column';
 
-    const peoplesStore = usePeoplesStore();
-    const { peoples } = storeToRefs(peoplesStore);
+    interface Person {
+        id: number;
+        name: string;
+        age: string;
+ 
+    }
 
-    const newPeople = ref({
-        name: '',
-        age: 0,
+    const persons = ref<Person[]>([
+
+    ]);
+
+    const newPerson = ref<Omit<Person, 'id'>>({
+        name: "",
+        age: "",
+
     });
 
-    const addPeople = async () => {
-        if (newPeople.value.name.trim() !== '' && newPeople.value.age > 0) {
-            await peoplesStore.addPeople({
-                ...newPeople.value,
-                id: 0, 
-            });
-
-            newPeople.value = { name: '', age: 0 };
-        } 
-    };
     const editingPerson = ref<Person | null>(null);
 
     const addPerson = () => {
@@ -86,11 +82,14 @@
             id: persons.value.length + 1,
             ...newPerson.value
         });
-        newPerson.value = { name: "", city: "", region: "", date: "" };
+        newPerson.value = { name: "", age: "" };
+        SavePersonsToLocalStorage();
     };
 
     const deletePerson = (id: number) => {
         persons.value = persons.value.filter(p => p.id !== id);
+        SavePersonsToLocalStorage();
+
     };
 
     const editPerson = (person: Person) => {
@@ -104,17 +103,7 @@
             persons.value[index] = { ...editingPerson.value };
         }
         editingPerson.value = null;
+        SavePersonsToLocalStorage();
+
     };
-
-
-    const deletePeople = async (id: number) => {
-        peoples.value = peoples.value.filter(p => p.id !== id);
-    };
-  
-
-    onMounted(async () => {
-        peoplesStore.load();
-    });
-
-
 </script>
