@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using backend.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers;
 
@@ -24,7 +25,10 @@ public class EventsController : ControllerBase {
         }
         return Conflict();
     }
-    [HttpPut("{id}")] public IActionResult Update(int? id, [FromBody] Event e) {
+    
+    [HttpPut("{id}")]
+    [Authorize]
+    public IActionResult Update(int? id, [FromBody] Event e) {
         var dbEvent = context.EventList!.AsNoTracking().FirstOrDefault(eventInDB => eventInDB.Id == e.Id);
         if (id != e.Id || dbEvent == null) return NotFound();     
         context.Update(e);
